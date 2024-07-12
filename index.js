@@ -4,10 +4,11 @@ const {open} = require('sqlite')
 const sqlite3 = require('sqlite3')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const cors = require('cors')
 
 const dbPath = path.join(__dirname, 'users.db')
 const app = express()
-
+app.use(cors())
 app.use(express.json())
 
 let dbUsers = null
@@ -25,30 +26,8 @@ const initializeDBAndServer = async () => {
 }
 initializeDBAndServer()
 
-// middleware function
-const authenticateToken = (request, response, next) => {
-  let jwtToken
-  const authHeader = request.headers['authorization']
-  if (authHeader !== undefined) {
-    jwtToken = authHeader.split(' ')[1]
-  }
-  if (jwtToken === undefined) {
-    response.status(401)
-    response.send('Invalid Access Token')
-  } else {
-    jwt.verify(jwtToken, 'MY_SECRET_TOKEN', async (error, payload) => {
-      if (error) {
-        response.send('Invalid Access Token')
-      } else {
-        request.username = payload.username
-        next()
-      }
-    })
-  }
-}
-
 //User Register API
-app.post('/users/', authenticateToken, async (request, response) => {
+app.post('/register', async (request, response) => {
   const {username, password, gender, location} = request.body
   const hashedPassword = await bcrypt.hash(request.body.password, 10)
 
@@ -74,7 +53,7 @@ app.post('/users/', authenticateToken, async (request, response) => {
 })
 
 //User Login API
-app.post('/login/', authenticateToken, async (request, response) => {
+app.post('/login', async (request, response) => {
   const {username, password} = request.body
   const selectUserQuery = `SELECT * FROM users WHERE username = '${username}'`
   const dbUser = await dbUsers.get(selectUserQuery)
@@ -95,4 +74,10 @@ app.post('/login/', authenticateToken, async (request, response) => {
       response.send('Invalid Password')
     }
   }
+})
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).send('Something went wrong!')
 })
