@@ -1,7 +1,6 @@
 
 POST http://localhost:3000/register
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhaHVsMTIzIiwiaWF0IjoxNzA2Njc1OTI1fQ.IhQD5DaY6vI3QIpZ9-16DmW7QcB6JCR7c_E2-QAipMA
 
 {    
     "username": "srinivas",
@@ -14,7 +13,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJha
 
 POST http://localhost:3000/login
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhaHVsMTIzIiwiaWF0IjoxNzA2Njc1OTI1fQ.IhQD5DaY6vI3QIpZ9-16DmW7QcB6JCR7c_E2-QAipMA
 
 {    
     "username": "srinivas",
